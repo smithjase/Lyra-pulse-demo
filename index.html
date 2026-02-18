@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyra Pulse — AI Efficacy Baseline</title>
+    <meta name="description" content="Understand how AI is actually experienced in your organisation. Structured ethnographic sensing across six dimensions of AI efficacy.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --display: 'Fraunces', Georgia, serif;
+    --body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+    --primary: #1A1918;
+    --secondary: #5C5A56;
+    --muted: #8A8783;
+    --accent: #2D6A4F;
+    --accent-soft: #40916C;
+    --accent-bg: #E8F5EE;
+    --accent-border: #B7E4C7;
+    --bg: #FAFAF8;
+    --bg-warm: #F5F4F0;
+    --border: #E8E6E1;
+    --border-light: #F0EDE8;
+    --surface: #FFFFFF;
+    --highlight: #D4A373;
+    --danger: #C1666B;
+    --danger-bg: #FDE8E8;
+    --warning: #D4A373;
+    --warning-bg: #FFF8F0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--body); font-weight: 400; line-height: 1.6; color: var(--primary); background: var(--bg); min-height: 100vh; }
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+@keyframes growBar { from { width: 0; } }
+.fade-in { animation: fadeIn 400ms ease; }
+
+/* Header */
+.header { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; background: var(--surface); border-bottom: 1px solid var(--border-light); position: sticky; top: 0; z-index: 100; }
+.header-left { display: flex; align-items: baseline; gap: 16px; }
+.logo { font-family: var(--display); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; }
+.logo-suffix { font-weight: 300; color: var(--muted); }
+.header-sub { font-size: 0.8125rem; color: var(--secondary); }
+.badge { font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); background: var(--accent-bg); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--accent-border); }
+
+/* Main */
+.main { flex: 1; padding: 48px 28px; }
+.container { max-width: 860px; margin: 0 auto; }
+.container-narrow { max-width: 640px; margin: 0 auto; }
+
+/* Typography */
+.eyebrow { color: var(--muted); margin-bottom: 8px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.8125rem; }
+.title { font-family: var(--display); font-size: 2rem; font-weight: 400; color: var(--primary); margin-bottom: 12px; letter-spacing: -0.02em; }
+.subtitle { color: var(--secondary); font-size: 1.0625rem; margin-bottom: 40px; line-height: 1.6; }
+.section-label { font-size: 0.8125rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 14px; }
+.section-label-sm { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+.body-text { font-size: 0.9375rem; color: var(--secondary); line-height: 1.6; }
+
+/* Cards */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+.card-title { font-family: var(--display); font-size: 1.1875rem; font-weight: 500; color: var(--primary); margin-bottom: 16px; }
+.headline-card { font-family: var(--display); font-size: 1.25rem; font-weight: 400; line-height: 1.5; color: var(--primary); padding: 18px 22px; background: var(--accent-bg); border-radius: 10px; border-left: 4px solid var(--accent); margin-bottom: 24px; }
+.maturity-notice { padding: 12px 18px; background: var(--bg-warm); border-radius: 8px; border-left: 3px solid var(--border); font-size: 0.8125rem; color: var(--muted); font-style: italic; }
+
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+@media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr 1fr; } }
+
+/* Forms */
+.field { margin-bottom: 0; }
+.field label { display: block; font-size: 0.9375rem; font-weight: 500; color: var(--primary); margin-bottom: 6px; }
+.field input, .field textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9375rem; color: var(--primary); background: var(--surface); outline: none; transition: border-color 150ms ease; }
+.field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.field textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
+
+/* Buttons */
+.btn { font-family: var(--body); font-size: 1rem; font-weight: 500; padding: 14px 32px; border-radius: 8px; border: none; cursor: pointer; transition: all 150ms ease; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-soft); transform: translateY(-1px); }
+.btn-primary:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; }
+.btn-sm { padding: 6px 14px; font-size: 0.8125rem; border-radius: 6px; }
+.btn-ghost { background: var(--surface); color: var(--secondary); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--accent-border); color: var(--primary); }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border-light); padding-bottom: 2px; margin-bottom: 28px; }
+.tab { padding: 8px 16px; font-size: 0.875rem; font-weight: 400; color: var(--secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -3px; transition: all 150ms; }
+.tab:hover { color: var(--primary); }
+.tab.active { font-weight: 600; color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Cycle toggle */
+.cycle-toggle { display: flex; gap: 6px; }
+.cycle-btn { padding: 6px 14px; border-radius: 6px; font-size: 0.8125rem; font-weight: 500; cursor: pointer; transition: all 150ms; }
+.cycle-btn.active { background: var(--accent); border: 1px solid var(--accent); color: white; }
+.cycle-btn.inactive { background: var(--surface); border: 1px solid var(--border); color: var(--secondary); }
+
+/* Tags */
+.tag { font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; }
+.dim-badge { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 10px; border-radius: 4px; }
+
+/* Insight card internals */
+.quote-block { font-size: 0.9375rem; font-style: italic; color: var(--secondary); padding: 6px 14px; background: var(--bg-warm); border-left: 3px solid var(--highlight); border-radius: 0 4px 4px 0; margin-bottom: 6px; }
+.why-block { font-size: 0.9375rem; color: var(--primary); line-height: 1.7; padding: 10px 14px; background: var(--bg-warm); border-radius: 8px; }
+.explore-item { font-size: 0.9375rem; color: var(--accent); padding-left: 18px; position: relative; margin-bottom: 4px; }
+.explore-item::before { content: '→'; position: absolute; left: 0; }
+.evidence-note { font-size: 0.8125rem; color: var(--muted); font-style: italic; padding-top: 12px; border-top: 1px solid var(--border-light); margin-top: 14px; }
+.bullet-item { font-size: 0.9375rem; color: var(--secondary); line-height: 1.6; padding-left: 18px; position: relative; margin-bottom: 4px; }
+.bullet-item::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 5px; height: 5px; background: var(--accent-border); border-radius: 50%; }
+
+/* Suggestion list */
+.suggestion-item { font-size: 0.9375rem; color: var(--secondary); padding: 6px 0 6px 18px; position: relative; }
+.suggestion-item::before { content: '○'; position: absolute; left: 0; color: var(--accent); }
+
+/* Misc */
+.warm-box { padding: 20px; background: var(--bg-warm); border-radius: 10px; border: 1px solid var(--border-light); }
+.net-note { margin-top: 20px; padding: 16px; background: var(--bg-warm); border-radius: 8px; border-left: 3px solid var(--highlight); }
+.loading-dots { display: inline-flex; gap: 4px; align-items: center; margin-left: 4px; }
+.loading-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.loading-dot:nth-child(1) { animation: pulse 1.2s ease-in-out 0s infinite; }
+.loading-dot:nth-child(2) { animation: pulse 1.2s ease-in-out 0.2s infinite; }
+.loading-dot:nth-child(3) { animation: pulse 1.2s ease-in-out 0.4s infinite; }
+
+/* Footer */
+.footer { text-align: center; padding: 20px 28px; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--border-light); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+    <script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+// ─── Data ───────────────────────────────────────────────────────────────────
+
+const DIMS = {
+  adoption:       { label: "Adoption",       color: "#5B8C5A", desc: "Where and how AI is entering real work",          icon: "◆" },
+  purpose:        { label: "Purpose",        color: "#2D6A4F", desc: "Whether people understand why AI exists here",    icon: "◇" },
+  flow:           { label: "Flow",           color: "#3D8B7A", desc: "How AI affects workflow and cognitive load",       icon: "○" },
+  trust:          { label: "Trust",          color: "#7A6C5D", desc: "Confidence, risk perception, governance clarity", icon: "△" },
+  value:          { label: "Value",          color: "#D4A373", desc: "Whether AI improves outcomes, not just speed",    icon: "□" },
+  representation: { label: "Representation", color: "#9B8EA0", desc: "Whether org knowledge is reflected in AI tools",  icon: "⬡" },
+};
+
+const CYCLE_1 = {
+  cycle: 1, respondents: 47, participation_rate: 0.78,
+  signals: {
+    adoption:       { signal: 0.62, direction: "stable",  confidence: "emerging", mean: 3.4 },
+    purpose:        { signal: 0.41, direction: "weak",    confidence: "early",    mean: 2.8 },
+    flow:           { signal: 0.55, direction: "mixed",   confidence: "emerging", mean: 3.1 },
+    trust:          { signal: 0.38, direction: "fragile", confidence: "early",    mean: 2.6 },
+    value:          { signal: 0.52, direction: "uneven",  confidence: "emerging", mean: 3.2 },
+    representation: { signal: 0.29, direction: "weak",    confidence: "early",    mean: 2.3 },
+  },
+  net_value: { benefit: 0.58, friction: 0.45, risk: 0.35, intensification: 0.40 },
+  patterns: [
+    { theme: "Quiet adoption",          dim: "adoption", recurrence: "strong",   density: 0.72, sentiment: "cautious"   },
+    { theme: "Purpose drift",           dim: "purpose",  recurrence: "recurring", density: 0.58, sentiment: "uncertain"  },
+    { theme: "Rework burden",           dim: "flow",     recurrence: "strong",   density: 0.65, sentiment: "frustrated" },
+    { theme: "Governance ambiguity",    dim: "trust",    recurrence: "recurring", density: 0.61, sentiment: "anxious"    },
+    { theme: "Value pockets",           dim: "value",    recurrence: "recurring", density: 0.54, sentiment: "mixed"      },
+    { theme: "Knowledge gaps",          dim: "representation", recurrence: "emerging", density: 0.41, sentiment: "unaware" },
+    { theme: "Shadow AI normalising",   dim: "trust",    recurrence: "strong",   density: 0.68, sentiment: "resigned"   },
+    { theme: "Hidden rework cost",      dim: "value",    recurrence: "recurring", density: 0.57, sentiment: "frustrated" },
+  ],
+  friction: [
+    { area: "Review & verification", intensity: 0.72, roles: ["Legal", "Compliance", "Senior leads"] },
+    { area: "Prompt iteration",      intensity: 0.58, roles: ["All roles"] },
+    { area: "Output correction",     intensity: 0.64, roles: ["Content", "Marketing", "Comms"] },
+    { area: "Tool switching",        intensity: 0.45, roles: ["Operations", "Finance"] },
+  ],
+  insights: {
+    headline: "AI is being used more than reported — but value is being eroded by hidden rework, governance uncertainty, and uneven relevance across roles.",
+    net_value_narrative: "Early signals suggest AI creates genuine value in specific pockets — primarily first-draft and ideation work — but this appears partially offset by verification burden, rework costs, and cognitive load not visible in productivity metrics.",
+    cards: [
+      {
+        title: "Adoption is deeper than dashboards suggest — but largely invisible",
+        dim: "adoption",
+        observations: ["Usage extends beyond sanctioned tools into personal workflows and workarounds.", "Frequency is higher than self-reported, particularly for drafting and sense-checking.", "Avoidance zones cluster around high-stakes and compliance-adjacent work."],
+        causes: ["Sanctioned tools don't match the pace of real work.", "Perceived risk of disclosure outweighs benefit of transparency.", "No shared language exists for describing 'responsible informal use'."],
+        quotes: ["I use it every day — I just wouldn't call it 'using AI' in a survey.", "For real work, I've found my own way."],
+        why: "When adoption is invisible, leaders make investment decisions based on incomplete data. Shadow patterns become the real operating system.",
+        explore: ["Map the gap between sanctioned and actual tool use by function.", "Surface the workaround economy without creating fear."],
+        evidence: "Strong signal across multiple roles — consistent 'quiet use' language pattern."
+      },
+      {
+        title: "Value exists in pockets — but the net picture is cloudier than expected",
+        dim: "value",
+        observations: ["Time savings reported for first-draft tasks but frequently offset by verification effort.", "Roles closest to content creation see highest perceived value; operational roles see lowest.", "Hidden rework is rarely accounted for in value assessments."],
+        causes: ["Value measurement focuses on speed rather than end-to-end quality.", "Verification burden falls unevenly on senior staff and reviewers.", "Work intensification is invisible because it's distributed."],
+        quotes: ["It saves me twenty minutes writing and costs me thirty minutes checking.", "The first draft is faster. Everything after that... I'm not sure it's quicker."],
+        why: "If net value is lower than perceived value, AI investment decisions rest on optimistic assumptions. The rework tax is real but rarely measured.",
+        explore: ["Quantify the verification burden by role.", "Map where value genuinely compounds vs where it shifts effort."],
+        evidence: "Recurring signal — consistent across content, legal, and analytical roles."
+      },
+      {
+        title: "Trust is fragile — and silence is the dominant signal",
+        dim: "trust",
+        observations: ["Most people describe uncertainty about what's acceptable, not what's possible.", "Governance rules exist on paper but feel ambiguous in daily practice.", "People are optimising for personal safety rather than organisational learning."],
+        causes: ["Policy language doesn't translate into scenario-level guidance.", "No safe mechanism exists for discussing failed AI use.", "Social norms haven't formed — so people default to silence."],
+        quotes: ["I know the policy. I don't know if what I'm doing follows it.", "I'd share more if I knew it wouldn't come back to bite me."],
+        why: "Trust fragility suppresses signal quality across all other dimensions. If people self-censor, every measurement is filtered through caution rather than reality.",
+        explore: ["Identify where 'safe-to-discuss' zones could be created.", "Explore what governance clarity would actually look like in practice."],
+        evidence: "Strong, consistent signal — trust language appears across all roles and functions."
+      },
+    ],
+    next: [
+      "Deepen into Flow: map the actual rework chain from AI draft to final output.",
+      "Explore Purpose alignment: test whether leadership's AI narrative matches frontline experience.",
+      "Investigate the verification burden: who carries it, how much time it takes, and whether it's recognised.",
+    ],
+  },
+};
+
+const CYCLE_2 = {
+  cycle: 2, respondents: 52, participation_rate: 0.83,
+  signals: {
+    adoption:       { signal: 0.68, direction: "growing",   confidence: "emerging", mean: 3.6, delta: +0.06 },
+    purpose:        { signal: 0.49, direction: "improving",  confidence: "emerging", mean: 3.1, delta: +0.08 },
+    flow:           { signal: 0.52, direction: "mixed",      confidence: "emerging", mean: 3.0, delta: -0.03 },
+    trust:          { signal: 0.44, direction: "emerging",   confidence: "emerging", mean: 2.9, delta: +0.06 },
+    value:          { signal: 0.56, direction: "clarifying", confidence: "emerging", mean: 3.3, delta: +0.04 },
+    representation: { signal: 0.33, direction: "early",      confidence: "early",    mean: 2.5, delta: +0.04 },
+  },
+  movement: {
+    persisting: ["Quiet adoption", "Rework burden", "Governance ambiguity"],
+    emerging:   ["Verification fatigue", "Role-based value divergence"],
+    declining:  ["Shadow AI normalising"],
+  },
+};
+
+// ─── SVG Radar ──────────────────────────────────────────────────────────────
+
+function Radar({ signals, size = 280 }) {
+  const dims = Object.entries(signals);
+  const cx = size / 2, cy = size / 2, r = size * 0.375;
+  const levels = [0.25, 0.5, 0.75, 1.0];
+
+  const pt = (i, v) => {
+    const a = (Math.PI * 2 * i) / dims.length - Math.PI / 2;
+    return [cx + r * v * Math.cos(a), cy + r * v * Math.sin(a)];
+  };
+
+  const shape = dims.map(([, d], i) => pt(i, d.signal));
+  const pathD = shape.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ") + "Z";
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: "visible" }}>
+      {levels.map(l => {
+        const pts = dims.map((_, i) => pt(i, l));
+        return <polygon key={l} points={pts.map(p => p.join(",")).join(" ")} fill="none" stroke="var(--border)" strokeWidth={l === 0.5 ? 1 : 0.5} strokeDasharray={l < 1 ? "3,3" : "none"} />;
+      })}
+      {dims.map(([key], i) => {
+        const [ex, ey] = pt(i, 1);
+        const [lx, ly] = pt(i, 1.22);
+        return (
+          <g key={key}>
+            <line x1={cx} y1={cy} x2={ex} y2={ey} stroke="var(--border)" strokeWidth={0.5} />
+            <text x={lx} y={ly} textAnchor="middle" dominantBaseline="central" fontSize="11" fontWeight="500" fill={DIMS[key].color}>{DIMS[key].label}</text>
+          </g>
+        );
+      })}
+      <polygon points={shape.map(p => p.join(",")).join(" ")} fill="rgba(45,106,79,0.12)" stroke="#2D6A4F" strokeWidth={2} />
+      {shape.map((p, i) => (
+        <circle key={i} cx={p[0]} cy={p[1]} r={4} fill={DIMS[Object.keys(signals)[i]].color} stroke="white" strokeWidth={1.5} />
+      ))}
+    </svg>
+  );
+}
+
+// ─── Signal Bars ────────────────────────────────────────────────────────────
+
+function SignalBar({ dimKey, signal, mean, delta, showDelta }) {
+  const d = DIMS[dimKey];
+  const pct = Math.round(signal * 100);
+  const labels = ["Weak", "Early", "Emerging", "Developing", "Strong"];
+  const li = Math.min(Math.floor(signal * 5), 4);
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ color: d.color, fontSize: "0.875rem", fontWeight: 600 }}>{d.icon}</span>
+          <span style={{ fontSize: "0.875rem", fontWeight: 500 }}>{d.label}</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: "0.75rem", color: "var(--muted)" }}>{labels[li]}</span>
+          {showDelta && delta != null && (
+            <span className="tag" style={{
+              fontSize: "0.6875rem", fontWeight: 600,
+              color: delta > 0 ? "#2D6A4F" : delta < 0 ? "#C1666B" : "var(--muted)",
+              background: delta > 0 ? "var(--accent-bg)" : delta < 0 ? "var(--danger-bg)" : "var(--bg-warm)",
+            }}>
+              {delta > 0 ? "+" : ""}{(delta * 100).toFixed(0)}
+            </span>
+          )}
+        </div>
+      </div>
+      <div style={{ width: "100%", height: 6, background: "var(--border-light)", borderRadius: 3, overflow: "hidden" }}>
+        <div style={{ width: `${pct}%`, height: "100%", background: d.color, borderRadius: 3, animation: "growBar 0.8s ease" }} />
+      </div>
+      {mean != null && <div style={{ fontSize: "0.6875rem", color: "var(--muted)", marginTop: 2 }}>Anchor mean: {mean.toFixed(1)}/5</div>}
+    </div>
+  );
+}
+
+// ─── Net Value ──────────────────────────────────────────────────────────────
+
+function NetValue({ data }) {
+  const Bar = ({ label, value, color, neg }) => (
+    <div style={{ marginBottom: 10 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", marginBottom: 3 }}>
+        <span style={{ color: "var(--secondary)" }}>{neg ? "−" : "+"} {label}</span>
+        <span style={{ color: "var(--muted)" }}>{(value * 100).toFixed(0)}%</span>
+      </div>
+      <div style={{ width: "100%", height: 8, background: "var(--border-light)", borderRadius: 4, overflow: "hidden" }}>
+        <div style={{ width: `${value * 100}%`, height: "100%", background: color, borderRadius: 4, animation: "growBar 0.8s ease" }} />
+      </div>
+    </div>
+  );
+  const net = data.benefit - (data.friction * 0.35) - (data.risk * 0.3) - (data.intensification * 0.35);
+  const label = net > 0.15 ? "Positive" : net > 0 ? "Marginal" : "Uncertain";
+  const col = net > 0.15 ? "var(--accent)" : net > 0 ? "var(--highlight)" : "var(--danger)";
+  return (
+    <div>
+      <Bar label="Benefit signals" value={data.benefit} color="var(--accent)" />
+      <Bar label="Friction signals" value={data.friction} color="var(--danger)" neg />
+      <Bar label="Risk signals" value={data.risk} color="var(--highlight)" neg />
+      <Bar label="Work intensification" value={data.intensification} color="#9B8EA0" neg />
+      <div style={{
+        marginTop: 16, padding: "10px 14px", borderRadius: 8,
+        background: net > 0 ? "var(--accent-bg)" : "var(--warning-bg)",
+        border: `1px solid ${net > 0 ? "var(--accent-border)" : "#F0D9B5"}`,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+      }}>
+        <span style={{ fontSize: "0.875rem", fontWeight: 500 }}>Net value signal</span>
+        <span style={{ fontSize: "0.875rem", fontWeight: 600, color: col }}>{label}</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Patterns ───────────────────────────────────────────────────────────────
+
+function Patterns({ patterns }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {patterns.map((p, i) => (
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: "var(--surface)", border: "1px solid var(--border-light)", borderRadius: 8 }}>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", flexShrink: 0, background: p.recurrence === "strong" ? "var(--accent)" : p.recurrence === "recurring" ? "var(--highlight)" : "var(--muted)" }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "0.875rem", fontWeight: 500 }}>{p.theme}</div>
+            <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>{DIMS[p.dim]?.label} · {p.recurrence} · {p.sentiment}</div>
+          </div>
+          <div style={{ width: 44, height: 4, background: "var(--border-light)", borderRadius: 2, overflow: "hidden" }}>
+            <div style={{ width: `${p.density * 100}%`, height: "100%", background: DIMS[p.dim]?.color, borderRadius: 2 }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Friction ───────────────────────────────────────────────────────────────
+
+function Friction({ hotspots }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {hotspots.map((h, i) => (
+        <div key={i} className="card" style={{ padding: "14px 18px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <span style={{ fontSize: "0.875rem", fontWeight: 500 }}>{h.area}</span>
+            <span className="tag" style={{
+              fontSize: "0.6875rem", fontWeight: 600,
+              color: h.intensity > 0.65 ? "#8B3A3A" : h.intensity > 0.5 ? "#8B6914" : "var(--muted)",
+              background: h.intensity > 0.65 ? "var(--danger-bg)" : h.intensity > 0.5 ? "var(--warning-bg)" : "var(--bg-warm)",
+            }}>
+              {h.intensity > 0.65 ? "High" : h.intensity > 0.5 ? "Medium" : "Low"} friction
+            </span>
+          </div>
+          <div style={{ width: "100%", height: 4, background: "var(--border-light)", borderRadius: 2, marginBottom: 6 }}>
+            <div style={{ width: `${h.intensity * 100}%`, height: "100%", borderRadius: 2, background: h.intensity > 0.65 ? "var(--danger)" : h.intensity > 0.5 ? "var(--highlight)" : "var(--muted)" }} />
+          </div>
+          <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Roles: {h.roles.join(", ")}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Movement ───────────────────────────────────────────────────────────────
+
+function Movement({ current, previous }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {Object.keys(current).map(d => {
+        const delta = current[d].signal - (previous[d]?.signal || 0);
+        const dir = delta > 0.03 ? "↑" : delta < -0.03 ? "↓" : "→";
+        const col = delta > 0.03 ? "var(--accent)" : delta < -0.03 ? "var(--danger)" : "var(--muted)";
+        return (
+          <div key={d} style={{ display: "flex", alignItems: "center", gap: 10, padding: "5px 0" }}>
+            <span style={{ width: 85, fontSize: "0.8125rem", fontWeight: 500, color: DIMS[d].color }}>{DIMS[d].label}</span>
+            <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ width: 50, height: 4, background: "var(--border-light)", borderRadius: 2, overflow: "hidden" }}>
+                <div style={{ width: `${(previous[d]?.signal || 0) * 100}%`, height: "100%", background: DIMS[d].color, opacity: 0.3, borderRadius: 2 }} />
+              </div>
+              <span style={{ fontSize: "0.6875rem", color: "var(--muted)" }}>→</span>
+              <div style={{ width: 50, height: 4, background: "var(--border-light)", borderRadius: 2, overflow: "hidden" }}>
+                <div style={{ width: `${current[d].signal * 100}%`, height: "100%", background: DIMS[d].color, borderRadius: 2 }} />
+              </div>
+            </div>
+            <span style={{ fontSize: "0.6875rem", fontWeight: 600, width: 40, textAlign: "right", color: col }}>
+              {dir} {Math.abs(delta * 100).toFixed(0)}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Screens ────────────────────────────────────────────────────────────────
+
+function Setup({ onGo }) {
+  const [name, setName] = useState("");
+  const [size, setSize] = useState("");
+  const [sector, setSector] = useState("");
+  const [ctx, setCtx] = useState("");
+  const ok = name && ctx;
+  return (
+    <div className="container-narrow fade-in">
+      <p className="eyebrow">AI Efficacy Baseline · Cycle 1</p>
+      <h2 className="title">Set up your baseline</h2>
+      <p className="subtitle">Lyra will measure six dimensions of AI efficacy to establish where your organisation is today.</p>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div className="field"><label>Organisation name</label><input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Northstar Insurance Group" /></div>
+        <div className="grid-2">
+          <div className="field"><label>Size</label><input value={size} onChange={e => setSize(e.target.value)} placeholder="e.g. ~3,000 employees" /></div>
+          <div className="field"><label>Sector</label><input value={sector} onChange={e => setSector(e.target.value)} placeholder="e.g. Financial services" /></div>
+        </div>
+        <div className="field"><label>Current AI situation</label><textarea value={ctx} onChange={e => setCtx(e.target.value)} placeholder="e.g. We've rolled out Copilot but adoption is patchy. Leadership wants to understand what's really happening." /></div>
+
+        <div className="warm-box">
+          <div className="section-label" style={{ marginBottom: 12 }}>Baseline dimensions</div>
+          <div className="grid-3">
+            {Object.entries(DIMS).map(([k, d]) => (
+              <div key={k} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.8125rem" }}>
+                <span style={{ color: d.color, fontWeight: 600 }}>{d.icon}</span>
+                <span style={{ color: "var(--secondary)" }}>{d.label}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 10, fontStyle: "italic" }}>
+            Each dimension: 2 scaled anchors + 3–4 qualitative prompts. Full cycle: 5 rotating pulses over 8–12 weeks.
+          </p>
+        </div>
+
+        <button className="btn btn-primary" disabled={!ok} onClick={() => ok && onGo({ name, size, sector, ctx })} style={{ alignSelf: "flex-start", marginTop: 8 }}>
+          Run baseline simulation →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Running({ org, onDone }) {
+  const stages = ["Collecting pulse responses", "Extracting themes & patterns", "Clustering by dimension", "Computing baseline signals", "Synthesising narrative"];
+  const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setPhase(p => { if (p >= stages.length - 1) { clearInterval(t); return p; } return p + 1; }), 1400);
+    return () => clearInterval(t);
+  }, []);
+
+  return (
+    <div className="container-narrow fade-in" style={{ textAlign: "center" }}>
+      <p className="eyebrow">{org.name} · Baseline Cycle 1</p>
+      <h2 className="title" style={{ fontSize: "1.75rem" }}>Running baseline analysis</h2>
+
+      <div style={{ background: "var(--bg-warm)", borderRadius: 12, padding: 32, margin: "24px 0 32px" }}>
+        <div style={{ fontSize: "2.5rem", fontFamily: "var(--display)", fontWeight: 300, color: "var(--accent)" }}>
+          47<span style={{ fontSize: "1.25rem", color: "var(--muted)" }}> responses</span>
+        </div>
+        <p style={{ fontSize: "0.8125rem", color: "var(--muted)" }}>78% participation across 5 pulses</p>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
+        {stages.map((s, i) => (
+          <div key={i} style={{
+            display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
+            background: i <= phase ? "var(--accent-bg)" : "var(--bg-warm)", borderRadius: 8,
+            border: `1px solid ${i <= phase ? "var(--accent-border)" : "var(--border-light)"}`, transition: "all 400ms",
+          }}>
+            <span style={{
+              width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+              background: i < phase ? "var(--accent)" : i === phase ? "var(--accent-bg)" : "var(--border-light)",
+              color: i < phase ? "white" : "var(--accent)", fontSize: "0.75rem", fontWeight: 600,
+              border: i === phase ? "2px solid var(--accent)" : "none",
+            }}>
+              {i < phase ? "✓" : i + 1}
+            </span>
+            <span style={{ fontSize: "0.9375rem", fontWeight: i === phase ? 500 : 400, color: i <= phase ? "var(--primary)" : "var(--muted)" }}>{s}</span>
+            {i === phase && <span className="loading-dots"><span className="loading-dot"/><span className="loading-dot"/><span className="loading-dot"/></span>}
+          </div>
+        ))}
+      </div>
+
+      {phase >= stages.length - 1 && (
+        <button className="btn btn-primary fade-in" onClick={onDone} style={{ marginTop: 32 }}>View baseline results →</button>
+      )}
+    </div>
+  );
+}
+
+function Results({ org }) {
+  const [tab, setTab] = useState("overview");
+  const [c2, setC2] = useState(false);
+  const d = c2 ? CYCLE_2 : CYCLE_1;
+  const sigs = d.signals;
+
+  return (
+    <div className="container fade-in">
+      {/* Header row */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+        <div>
+          <p className="eyebrow">{org.name} · AI Efficacy Baseline · Cycle {c2 ? 2 : 1}</p>
+          <h2 className="title">Baseline Results</h2>
+        </div>
+        <div className="cycle-toggle">
+          <button className={`cycle-btn ${!c2 ? "active" : "inactive"}`} onClick={() => setC2(false)}>Cycle 1</button>
+          <button className={`cycle-btn ${c2 ? "active" : "inactive"}`} onClick={() => setC2(true)}>Cycle 2</button>
+        </div>
+      </div>
+
+      <div className="maturity-notice" style={{ marginBottom: 24 }}>
+        Baseline level · {d.respondents} responses · {Math.round(d.participation_rate * 100)}% participation · These are early directional signals, not definitive measurements.
+      </div>
+
+      {/* Tabs */}
+      <div className="tabs">
+        {["overview", "signals", "patterns", "friction", "insights"].map(t => (
+          <button key={t} className={`tab ${tab === t ? "active" : ""}`} onClick={() => setTab(t)}>
+            {t.charAt(0).toUpperCase() + t.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* ── Overview ── */}
+      {tab === "overview" && (
+        <div className="fade-in">
+          <div className="headline-card">{CYCLE_1.insights.headline}</div>
+          <div className="grid-2">
+            <div className="card">
+              <div className="section-label">Efficacy Shape</div>
+              <div style={{ display: "flex", justifyContent: "center" }}><Radar signals={sigs} /></div>
+            </div>
+            <div className="card">
+              <div className="section-label">Net Value Signal</div>
+              <NetValue data={CYCLE_1.net_value} />
+            </div>
+          </div>
+
+          {c2 && (
+            <div className="card" style={{ marginTop: 24 }}>
+              <div className="section-label">Movement Since Cycle 1</div>
+              <Movement current={CYCLE_2.signals} previous={CYCLE_1.signals} />
+              <div style={{ marginTop: 16, padding: 14, background: "var(--bg-warm)", borderRadius: 8 }}>
+                <div style={{ fontSize: "0.8125rem", fontWeight: 500, marginBottom: 6 }}>Theme movement</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {CYCLE_2.movement.persisting.map(t => <span key={t} className="tag" style={{ color: "var(--muted)", background: "var(--bg-warm)", border: "1px solid var(--border)" }}><b>Persists:</b> {t}</span>)}
+                  {CYCLE_2.movement.emerging.map(t => <span key={t} className="tag" style={{ color: "var(--highlight)", background: "var(--warning-bg)", border: "1px solid #F0D9B5" }}><b>New:</b> {t}</span>)}
+                  {CYCLE_2.movement.declining.map(t => <span key={t} className="tag" style={{ color: "var(--accent)", background: "var(--accent-bg)", border: "1px solid var(--accent-border)" }}><b>Declining:</b> {t}</span>)}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="card" style={{ marginTop: 24 }}>
+            <div className="section-label">Dimension Signals</div>
+            {Object.entries(sigs).map(([k, s]) => <SignalBar key={k} dimKey={k} signal={s.signal} mean={s.mean} delta={s.delta} showDelta={c2} />)}
+          </div>
+        </div>
+      )}
+
+      {/* ── Signals ── */}
+      {tab === "signals" && (
+        <div className="grid-2 fade-in">
+          {Object.entries(sigs).map(([k, s]) => (
+            <div key={k} className="card">
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: "1.25rem", color: DIMS[k].color }}>{DIMS[k].icon}</span>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: "0.9375rem" }}>{DIMS[k].label}</div>
+                  <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>{DIMS[k].desc}</div>
+                </div>
+              </div>
+              <div className="grid-2" style={{ gap: 12, marginBottom: 12 }}>
+                <div style={{ padding: 10, background: "var(--bg-warm)", borderRadius: 6, textAlign: "center" }}>
+                  <div style={{ fontSize: "1.5rem", fontFamily: "var(--display)", fontWeight: 300, color: DIMS[k].color }}>{(s.signal * 100).toFixed(0)}</div>
+                  <div style={{ fontSize: "0.6875rem", color: "var(--muted)" }}>Signal</div>
+                </div>
+                <div style={{ padding: 10, background: "var(--bg-warm)", borderRadius: 6, textAlign: "center" }}>
+                  <div style={{ fontSize: "1.5rem", fontFamily: "var(--display)", fontWeight: 300, color: DIMS[k].color }}>{s.mean.toFixed(1)}</div>
+                  <div style={{ fontSize: "0.6875rem", color: "var(--muted)" }}>Anchor /5</div>
+                </div>
+              </div>
+              <div className="body-text" style={{ fontSize: "0.8125rem" }}>
+                <b>Direction:</b> {s.direction} · <b>Confidence:</b> {s.confidence}
+              </div>
+              {c2 && s.delta != null && (
+                <div style={{ marginTop: 8, fontSize: "0.8125rem", fontWeight: 500, color: s.delta > 0 ? "var(--accent)" : s.delta < 0 ? "var(--danger)" : "var(--muted)" }}>
+                  {s.delta > 0 ? "↑" : s.delta < 0 ? "↓" : "→"} {s.delta > 0 ? "+" : ""}{(s.delta * 100).toFixed(0)} from Cycle 1
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── Patterns ── */}
+      {tab === "patterns" && (
+        <div className="fade-in">
+          <p className="body-text" style={{ marginBottom: 20 }}>Patterns extracted from qualitative responses, ranked by recurrence and density.</p>
+          <Patterns patterns={CYCLE_1.patterns} />
+        </div>
+      )}
+
+      {/* ── Friction ── */}
+      {tab === "friction" && (
+        <div className="fade-in">
+          <p className="body-text" style={{ marginBottom: 20 }}>Friction hotspots — where AI creates operational drag through rework, verification, and cognitive load.</p>
+          <Friction hotspots={CYCLE_1.friction} />
+          <div className="net-note">
+            <div style={{ fontSize: "0.8125rem", fontWeight: 500, marginBottom: 4 }}>Net value note</div>
+            <p className="body-text" style={{ fontSize: "0.8125rem", margin: 0 }}>{CYCLE_1.insights.net_value_narrative}</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Insights ── */}
+      {tab === "insights" && (
+        <div className="fade-in">
+          <div className="headline-card">{CYCLE_1.insights.headline}</div>
+
+          {CYCLE_1.insights.cards.map((card, i) => (
+            <div key={i} className="card" style={{ marginBottom: 20 }}>
+              <div style={{ marginBottom: 14 }}>
+                <span className="dim-badge" style={{ color: DIMS[card.dim]?.color, background: `${DIMS[card.dim]?.color}15` }}>
+                  {DIMS[card.dim]?.label}
+                </span>
+              </div>
+              <div className="card-title">{card.title}</div>
+
+              <div style={{ marginBottom: 16 }}>
+                <div className="section-label-sm">What we're noticing</div>
+                {card.observations.map((o, j) => <div key={j} className="bullet-item">{o}</div>)}
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <div className="section-label-sm">Why this might be happening</div>
+                {card.causes.map((c, j) => <div key={j} className="bullet-item">{c}</div>)}
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <div className="section-label-sm">Signals</div>
+                {card.quotes.map((q, j) => <div key={j} className="quote-block">"{q}"</div>)}
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <div className="section-label-sm">Why this matters</div>
+                <div className="why-block">{card.why}</div>
+              </div>
+              <div style={{ marginBottom: 0 }}>
+                <div className="section-label-sm">What to explore next</div>
+                {card.explore.map((e, j) => <div key={j} className="explore-item">{e}</div>)}
+              </div>
+              <div className="evidence-note">{card.evidence}</div>
+            </div>
+          ))}
+
+          <div className="warm-box" style={{ marginTop: 28 }}>
+            <div className="section-label">Suggested next pulse focus</div>
+            {CYCLE_1.insights.next.map((s, i) => <div key={i} className="suggestion-item">{s}</div>)}
+            <button className="btn btn-primary" onClick={() => setC2(true)} style={{ marginTop: 18, padding: "12px 28px", fontSize: "0.9375rem" }}>
+              Run Cycle 2 →
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── App ────────────────────────────────────────────────────────────────────
+
+function App() {
+  const [screen, setScreen] = useState("setup");
+  const [org, setOrg] = useState(null);
+
+  return (
+    <div>
+      <header className="header">
+        <div className="header-left">
+          <h1 className="logo">Lyra <span className="logo-suffix">Pulse</span></h1>
+          <span className="header-sub">AI Efficacy Baseline</span>
+        </div>
+        <span className="badge">Prototype</span>
+      </header>
+
+      <main className="main">
+        {screen === "setup" && <Setup onGo={o => { setOrg(o); setScreen("running"); }} />}
+        {screen === "running" && <Running org={org} onDone={() => setScreen("results")} />}
+        {screen === "results" && <Results org={org} />}
+      </main>
+
+      <footer className="footer">
+        Lyra Pulse · AI Efficacy Baseline · Simulated data for prototype testing · © Lyra AI 2025
+      </footer>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
